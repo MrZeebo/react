@@ -1,4 +1,4 @@
-import { useState, useRef} from 'react';
+import { useState, useRef, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 
 function SendText(userString) {
@@ -14,7 +14,7 @@ function MyForm() {
   const textLog = useRef(null);
   
   const [textarea, setTextarea] = useState(
-    "The content of a textarea goes in the value attribute"
+    "BILLY> Hi, my name's Billy.  What's on your mind?"
   );
 
   const [userInput, setUserInput] = useState("");
@@ -29,9 +29,13 @@ function MyForm() {
   
  const handleSubmit = (event) => {
     setTextarea(textarea + `\nYOU: ${userInput}\n` + "BILLY: " + SendText(userInput));
-    setUserInput("");
-    textLog.current.scrollTop = textLog.current.scrollHeight;
+    setUserInput("");   
   }
+  
+  // Scroll to bottom when textarea changes
+  useEffect(() => {
+    textLog.current.scrollTop = textLog.current.scrollHeight;
+}, [textarea]);
   
 
 
