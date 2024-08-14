@@ -54,19 +54,26 @@ function BillyHistory() {
   )
 }
 
-function MyForm() {
-  const textLog = useRef(null);
-  
-  const [textarea, setTextarea] = useState(
-    "BILLY> Hi, my name's Billy.  What's on your mind?"
-  );
+function ChatTextBox({ textarea }) {
+  const textLog = useRef(null); 
 
-  const [userInput, setUserInput] = useState("");
-  
-  const handleChange = (event) => {
-    setTextarea(event.target.value)
-  }
-  
+  // Scroll to bottom when textarea changes
+  useEffect(() => {
+    textLog.current.scrollTop = textLog.current.scrollHeight;
+}, [textarea]); 
+
+
+  return (
+      <>    
+        <p><textarea ref={textLog} value={textarea} rows="20" cols="100"/></p>      
+
+      </>
+  )
+}
+
+function UserInput({ setTextarea, textarea }) {
+  const [userInput, setUserInput] = useState("");  
+
   const handleUserInputChange = (event) => {
     setUserInput(event.target.value)
   }
@@ -75,20 +82,26 @@ function MyForm() {
     setTextarea(textarea + `\nYOU: ${userInput}\n` + "BILLY: " + SendText(userInput));
     setUserInput("");   
   }
-  
-  // Scroll to bottom when textarea changes
-  useEffect(() => {
-    textLog.current.scrollTop = textLog.current.scrollHeight;
-}, [textarea]);
-  
-
 
   return (
-      <>    
-        <p><textarea ref={textLog} value={textarea} onChange={handleChange} rows="20" cols="100"/></p>
-      
+      <>      
        <p>YOU: <input type="text" value={userInput} onChange={handleUserInputChange}/> <button onClick={handleSubmit}>Send</button></p>
+      </>
+  ) 
+}
+
+function MyForm() {  
+  const [textarea, setTextarea] = useState(
+    "BILLY> Hi, my name's Billy.  What's on your mind?"
+  );
+
+  return (
+      <>      
+       
+        <ChatTextBox textarea={textarea} />
       
+        <UserInput setTextarea={setTextarea } textarea={textarea} />
+        
        <BillyHistory />
       </>
   )
